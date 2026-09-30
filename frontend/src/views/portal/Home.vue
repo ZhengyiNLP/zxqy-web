@@ -67,37 +67,6 @@
         </div>
       </section>
 
-      <!-- 企业简介区域 -->
-      <section class="section about-section">
-        <div class="container">
-          <div class="section-header">
-            <h2 class="section-title">企业简介</h2>
-            <span class="section-en">About Us</span>
-          </div>
-          <el-row :gutter="40" class="about-body">
-            <el-col :xs="24" :md="13" class="about-text-col">
-              <p class="about-text">
-                {{ aboutSummary || '企业简介暂未填写，请登录后台管理系统完善企业简介内容。' }}
-              </p>
-              <router-link to="/about" class="about-more-link">
-                <el-button type="primary" round>了解更多</el-button>
-              </router-link>
-            </el-col>
-            <el-col :xs="24" :md="11">
-              <div class="about-features">
-                <div v-for="(f, i) in aboutFeatures" :key="i" class="feature-item">
-                  <span class="feature-index">0{{ i + 1 }}</span>
-                  <div class="feature-info">
-                    <h4>{{ f.title }}</h4>
-                    <p>{{ f.desc }}</p>
-                  </div>
-                </div>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </section>
-
       <!-- 最新动态区域 -->
       <section class="section news-section">
         <div class="container">
@@ -170,7 +139,6 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { portalApi } from '@/api/business'
-
 /** 轮播图项 */
 interface BannerItem {
   id: number
@@ -214,14 +182,6 @@ const imgUrl = (url: string) => (url ? '/api' + url : '')
 const banners = computed(() => home.value.banners || [])
 const latestArticles = computed(() => home.value.latestArticles || [])
 const recommendProducts = computed(() => home.value.recommendProducts || [])
-const aboutSummary = computed(() => home.value.aboutSummary || '')
-
-/** 企业简介区特性标签（装饰性内容） */
-const aboutFeatures = [
-  { title: '专业团队', desc: '经验丰富的技术服务团队' },
-  { title: '优质服务', desc: '全流程跟踪的贴心服务' },
-  { title: '持续创新', desc: '不断探索技术创新与应用' },
-]
 
 /** 日期拆分为「日」和「年-月」，用于新闻卡片角标展示 */
 const dateParts = (d?: string | null) => {
@@ -348,6 +308,24 @@ onMounted(loadHome)
 .hero-carousel {
   height: 440px;
 }
+/* 轮播指示器：改为简约短横线样式（当前页更长更实，其余半透明细线） */
+.hero-carousel :deep(.el-carousel__indicators) {
+  gap: 10px;
+}
+.hero-carousel :deep(.el-carousel__indicator) {
+  padding: 12px 4px;
+}
+.hero-carousel :deep(.el-carousel__indicator .el-carousel__button) {
+  width: 26px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.45);
+  opacity: 1;
+}
+.hero-carousel :deep(.el-carousel__indicator.is-active .el-carousel__button) {
+  width: 40px;
+  background: #ffffff;
+}
 /* 覆盖 el-carousel 默认 300px 高度，改为随外层容器自适应（响应式） */
 .hero-carousel :deep(.el-carousel__container) {
   height: 100% !important;
@@ -357,30 +335,17 @@ onMounted(loadHome)
   width: 100%;
   height: 100%;
   overflow: hidden;
-  /* 无图 banner 底色：清新天蓝渐变 */
-  background: linear-gradient(120deg, #a7d4f7 0%, #7fbef4 42%, #57a7ee 100%);
+  /* 无图 banner 底色：清新天蓝渐变（与 hero-placeholder 一致） */
+  background: linear-gradient(125deg, #d9ecfb 0%, #aad6f6 34%, #74baf1 68%, #4fa8e9 100%);
 }
 .banner-item::before {
   content: '';
   position: absolute;
-  width: 420px;
-  height: 420px;
-  right: -120px;
-  top: -140px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
+  inset: 0;
   pointer-events: none;
-}
-.banner-item::after {
-  content: '';
-  position: absolute;
-  width: 320px;
-  height: 320px;
-  left: -100px;
-  bottom: -120px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
-  pointer-events: none;
+  background:
+    radial-gradient(ellipse 640px 380px at 76% 18%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 62%),
+    radial-gradient(ellipse 520px 320px at 12% 88%, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 60%);
 }
 .banner-img {
   width: 100%;
@@ -424,30 +389,17 @@ onMounted(loadHome)
   color: #ffffff;
   text-align: center;
   overflow: hidden;
-  background: linear-gradient(120deg, #a7d4f7 0%, #7fbef4 42%, #57a7ee 100%);
+  background: linear-gradient(125deg, #d9ecfb 0%, #aad6f6 34%, #74baf1 68%, #4fa8e9 100%);
 }
-/* 柔光光斑：营造清新透亮的玻璃光感 */
-.hero-placeholder::before,
-.hero-placeholder::after {
+/* 弥散柔光：大范围光雾营造天空感，不用 blur 避免发脏 */
+.hero-placeholder::before {
   content: '';
   position: absolute;
-  border-radius: 50%;
+  inset: 0;
   pointer-events: none;
-  filter: blur(2px);
-}
-.hero-placeholder::before {
-  width: 420px;
-  height: 420px;
-  right: -120px;
-  top: -140px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
-}
-.hero-placeholder::after {
-  width: 320px;
-  height: 320px;
-  left: -100px;
-  bottom: -120px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+  background:
+    radial-gradient(ellipse 640px 380px at 76% 18%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 62%),
+    radial-gradient(ellipse 520px 320px at 12% 88%, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 60%);
 }
 .hero-slogan {
   position: relative;
@@ -478,64 +430,6 @@ onMounted(loadHome)
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 1px 6px rgba(30, 100, 170, 0.3);
-}
-
-/* ===== 企业简介 ===== */
-.about-section {
-  background: #ffffff;
-  padding-top: 72px;
-}
-.about-body {
-  align-items: center;
-}
-.about-text {
-  font-size: 15px;
-  line-height: 2;
-  color: var(--text-secondary, #646a73);
-  text-align: justify;
-  margin: 0 0 28px;
-}
-/* 增大“了解更多”与下方特性的间距，划清板块边界 */
-.about-more-link {
-  text-decoration: none;
-  display: inline-block;
-  margin-bottom: 12px;
-}
-.about-features {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 18px 20px;
-  border: 1px solid var(--border-subtle, #e5e6eb);
-  border-radius: 12px;
-  background: var(--bg-deep, #f7f8fa);
-  transition: all 0.25s;
-}
-.feature-item:hover {
-  border-color: var(--accent-blue, #3b82f6);
-  background: rgba(59, 130, 246, 0.04);
-}
-.feature-index {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--accent-blue, #3b82f6);
-  opacity: 0.9;
-}
-.feature-info h4 {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-primary, #1f2329);
-  margin: 0 0 2px;
-}
-.feature-info p {
-  font-size: 13px;
-  color: var(--text-tertiary, #8f959e);
-  margin: 0;
 }
 
 /* ===== 新闻动态 ===== */
@@ -724,11 +618,11 @@ onMounted(loadHome)
   .date-day {
     font-size: 18px;
   }
-  .about-text {
-    font-size: 14px;
+  .hero-carousel :deep(.el-carousel__indicator .el-carousel__button) {
+    width: 18px;
   }
-  .about-section {
-    padding-top: 48px;
+  .hero-carousel :deep(.el-carousel__indicator.is-active .el-carousel__button) {
+    width: 28px;
   }
 }
 </style>

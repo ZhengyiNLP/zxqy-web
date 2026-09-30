@@ -11,23 +11,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { portalApi } from '@/api/business'
 
-const props = defineProps<{ pageKey: string }>()
+/** 固定加载"关于我们"单页内容（与 Culture.vue 保持一致的硬编码模式） */
+const PAGE_KEY = 'about'
 const loading = ref(false)
 const pageData = ref<any>(null)
 
-async function loadPage() {
+onMounted(async () => {
   loading.value = true
   try {
-    const res = await portalApi.getPage(props.pageKey)
+    const res = await portalApi.getPage(PAGE_KEY)
     pageData.value = res.data
   } catch { pageData.value = null }
   finally { loading.value = false }
-}
-
-watch(() => props.pageKey, () => loadPage(), { immediate: true })
+})
 </script>
 
 <style scoped>

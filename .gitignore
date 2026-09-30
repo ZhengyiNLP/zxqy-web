@@ -9,20 +9,20 @@ __pycache__/
 node_modules/
 dist/
 
-# 数据库
-*.db
+# 数据库（演示数据 app.db 需随仓库部署，故不全局排除；仅排除 SQLite 临时文件）
 *.db-journal
+*.db-wal
+*.db-shm
 
 # 环境变量
 .env
 .env.local
 
-# 上传文件
-backend/uploads/*
-!backend/uploads/.gitkeep
+# 上传文件：保留演示图片（部署到云端后门户有内容展示），仅排除临时占位
+backend/uploads/.gitkeep
 
-# 数据目录
-backend/data/
+# 数据目录：保留演示数据库，排除 JWT 密钥文件（安全）
+backend/data/.jwt_secret
 
 # IDE
 .vscode/
