@@ -1,19 +1,13 @@
 <template>
   <div class="article-list-page">
-    <!-- 页面头部横幅 -->
-    <div class="page-hero">
-      <div class="container">
-        <el-breadcrumb separator="/" class="hero-breadcrumb">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>新闻动态</el-breadcrumb-item>
-        </el-breadcrumb>
-        <h1 class="hero-title">新闻动态</h1>
-        <p class="hero-sub">了解企业最新资讯与行业动态</p>
-      </div>
-    </div>
-
-    <!-- 主体内容 -->
+    <!-- 主体内容（与其他页面统一的简洁白底风格，无蓝色横幅） -->
     <div class="container page-body">
+      <!-- 页面标题 -->
+      <div class="page-header">
+        <h1 class="page-title">新闻动态</h1>
+        <p class="page-sub">了解企业最新资讯与行业动态</p>
+      </div>
+
       <!-- 栏目分类筛选：全部 + 各分类 -->
       <div class="category-bar">
         <button
@@ -218,44 +212,29 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* ===== 页面头部横幅 ===== */
-.page-hero {
-  background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 55%, #60a5fa 100%);
-  color: #ffffff;
-  padding: 36px 0 44px;
+/* ===== 页面标题（与产品展示/关于我们页面风格统一） ===== */
+.page-header {
+  padding: 36px 0 4px;
+}
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary, #1f2329);
+  margin: 0 0 8px;
+}
+.page-sub {
+  font-size: 14px;
+  color: var(--text-tertiary, #8f959e);
+  margin: 0;
 }
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 16px;
 }
-.hero-breadcrumb {
-  margin-bottom: 14px;
-}
-.hero-breadcrumb :deep(.el-breadcrumb__inner) {
-  color: rgba(255, 255, 255, 0.75);
-}
-.hero-breadcrumb :deep(.el-breadcrumb__inner a),
-.hero-breadcrumb :deep(.el-breadcrumb__inner.is-link) {
-  color: rgba(255, 255, 255, 0.75);
-  font-weight: 400;
-}
-.hero-breadcrumb :deep(.el-breadcrumb__separator) {
-  color: rgba(255, 255, 255, 0.45);
-}
-.hero-title {
-  font-size: 30px;
-  font-weight: 700;
-  margin: 0 0 6px;
-}
-.hero-sub {
-  font-size: 14px;
-  opacity: 0.8;
-  margin: 0;
-}
 
 .page-body {
-  padding: 32px 16px 72px;
+  padding: 0 16px 72px;
 }
 
 /* ===== 分类筛选条 ===== */
@@ -456,10 +435,10 @@ onMounted(() => {
 
 /* ===== 响应式：移动端封面图缩小、卡片纵向排列 ===== */
 @media (max-width: 768px) {
-  .page-hero {
-    padding: 24px 0 30px;
+  .page-header {
+    padding: 20px 0 0;
   }
-  .hero-title {
+  .page-title {
     font-size: 22px;
   }
   .article-cover {
